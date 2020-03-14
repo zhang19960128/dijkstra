@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <algorithm>
 class graph{
   public:
     graph();
@@ -61,18 +62,40 @@ graph::graph(std::string graphfile){
   }
 }
 void graph::dijkstra(){
-  std::list<double> shortestdistance;
-  std::list<int> shortestsequence;
+  std::list<int> shortestvisitsequence;
+  std::list<double> shortestvisitdistance;
   std::vector<int> visited(nodenumber,0);
+  std::vector<double> candidateshortest;
+  std::vector<int> candidatenewnode;
+  std::vector<int> candidatepredecessor;
   int newshortestnode;
+  int index;
   double newshortestdistance;
   do{
     newshortestdistance=1e15;
     for(struct{std::list<double>::iterator stdis;std::list<int>::iterator stnode;} a={shortestdistance.begin(),shortestsequence.begin()};a.stnode!=shortestsequence.end();a.stdis++,a.stnode++){
-
+	for(struct{std::list<double>::iterator stdis;std::list<int>::iterator stnode} b={this->distance[*(a.stnode)].begin(),this->edges[*(a.stnode)].begin()},b.stnode!=this->edges[*(a.stnode)].end();b.stdis++,b.stnode++){
+	  if(visited[*(b.stnode)]==0){
+	    candidateshortest.push_back(*(b.stdis)+*(a.stdis));
+	    candidatenewnode.push_back(*(b.stnode));
+	    candidatepredecessor.push_back(*(a.stnode));
+	  }
+	  else{
+	  }
+	}
     }
-  }while(shortestdistance.size()!=this->nodenumber);
+    index=std::min_element(candidateshortest.being(),candidateshortest.end())-candidateshortest.begin();
+    this->shortestdistance[candidatenewnode[index]]=candidateshortest[index];
+    /*get the shortest path*/
+    for(std::list<int>::iterator a=this->shortestpath[candidatepredecessor[index]].begin();a!=this->shortestpath[candidatepredecessor[index]].end();a++){
+    	this->shortestpath[candidatenewnode[index]].push_back(*a);
+    }
+    this->shortestpath[candidatenewnode[index]].push_back(candidatepredecessor[index]);
+    visited[candidatenewnode[index]]==1;
+    shortestvisitsequence.push_back(candidatenewnode[index]);
+  }while(shortestvisitsequence.size()!=this->nodenumber);
 }
 int main(){
-  graph G("dijkstra.txt");
+  graph g("dijkstra.txt");
+  g.dijkstra();
 }
