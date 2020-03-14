@@ -11,6 +11,9 @@ class graph{
     graph(int number);
     graph(std::string graphfile);
     void dijkstra();
+    double shortest(int node){
+    	return this->shortestdistance[node];
+    }
   private:
     int nodenumber;
     std::vector<int> nodevector;
@@ -108,6 +111,7 @@ void graph::dijkstra(){
     this->shortestpath[candidatenewnode[index]].push_back(candidatepredecessor[index]);
     visited[candidatenewnode[index]]=1;
   }while(shortestvisitsequence.size()!=this->nodenumber);
+  /*
   for(size_t i=0;i<this->nodenumber;i++){
   	std::cout<<"the shortest distance is: "<<this->shortestdistance[i]<<" the shortest path is:";
 	for(std::list<int>::iterator a=this->shortestpath[i].begin();a!=this->shortestpath[i].end();a++){
@@ -115,8 +119,14 @@ void graph::dijkstra(){
 	}
 	std::cout<<std::endl;
   }
+  */
 }
 int main(){
   graph g("dijkstra.txt");
   g.dijkstra();
+  int node[10]={7,37,59,82,99,115,133,165,188,197};
+  for(size_t i=0;i<10;i++){
+  	std::cout<<g.shortest(node[i]-1)<<",";
+  }
+  std::cout<<std::endl;
 }
